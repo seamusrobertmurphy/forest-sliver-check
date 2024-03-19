@@ -1,0 +1,62 @@
+---
+title: "Forest Sliver Check"
+author: "SCS-SMurphy"
+date: "2024-03-19"
+output: 
+  github_document:
+    toc: TRUE
+    toc_depth: 5
+    df_print: tibble
+    keep_html: TRUE
+
+always_allow_html: true
+---
+
+```{r setup, include=FALSE, message = FALSE, warning=FALSE, error=FALSE}
+library(readxl)
+library(magrittr)
+library(janitor)
+library(ggplot2)
+library(dplyr)
+library(RColorBrewer)
+library(psych)
+library(useful)
+library(caret)
+library(tibble)
+library(DescTools)
+library(animation)
+library(ModelMetrics)
+library(knitr)
+library(kableExtra)
+library(rmarkdown)
+library(dataMaid)
+library(animation)
+library(htmltools)
+library(gtsummary)
+library(data.table)
+library(htmltools)
+library(latex2exp)
+options(htmltools.dir.version = FALSE, htmltools.preserve.raw = FALSE)
+knitr::opts_chunk$set(
+  echo = TRUE, message = FALSE, warning = FALSE,
+  error = FALSE, comment = NA, tidy.opts = list(width.cutoff = 60), tidy = "styler"
+)
+```
+
+## Task 1
+
+***Prototype Tool for Checking Minimum Size of Forest Polygons in Submitted Baseline & Project Area Shapefiles (Raster check pending)***
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
