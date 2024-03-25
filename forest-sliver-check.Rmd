@@ -20,6 +20,7 @@ library(ggplot2)
 library(dplyr)
 library(RColorBrewer)
 library(psych)
+library(tmap)
 library(useful)
 library(caret)
 library(tibble)
@@ -31,6 +32,7 @@ library(kableExtra)
 library(rmarkdown)
 library(dataMaid)
 library(animation)
+library(sf)
 library(htmltools)
 library(gtsummary)
 library(data.table)
@@ -43,20 +45,35 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Task 1
-
-***Prototype Tool for Checking Minimum Size of Forest Polygons in Submitted Baseline & Project Area Shapefiles (Raster check pending)***
-
-```{r cars}
-summary(cars)
+```{r}
+polygon = read_sf("~/git_repos/forest-sliver-check/data/LWS_LUCC_Reference_Region_2009_2015_2018.shp")
+multipolygon = st_cast(polygon, "MULTIPOLYGON")
 ```
 
-## Including Plots
+## Task
 
-You can also embed plots, for example:
+***Prototype Tool for Checking Minimum Size of Forest Polygons in Submitted Baseline & Project Area Shapefiles***
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+multipolygon$area = st_area(multipolygon)
+slivers = multipolygon %>%
+  dplyr::filter(as.numeric(area) < 5000)
+
+ggplot(slivers) +
+  geom_sf(aes(color = 'red')) + 
+  theme_bw() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    legend.position = "none"
+  )
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+st_write(slivers, "slivers.shp")
+```
+
+```{r}
+tmap_mode("view")
+tm_shape(st_geometry(slivers)) + tm_polygons()
+```
