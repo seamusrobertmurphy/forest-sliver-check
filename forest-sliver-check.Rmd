@@ -47,9 +47,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Directive
+## Forest Sliver Check
 
-***Prototype Tool for Checking Minimum Size of Forest Polygons in Submitted Baseline & Project Area Shapefiles***
+***Workflow for Checking Minimum Size of Forest Patches in LULC Maps***
 
 ```{r}
 tmap_mode("view")
