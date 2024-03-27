@@ -1,9 +1,9 @@
 ---
 title: "Forest Sliver Check"
-author: "SCS-SMurphy"
+author: "SCS-Global"
 date: "2024-03-19"
 output: 
-  github_document:
+  html_document:
     toc: TRUE
     toc_depth: 5
     df_print: tibble
@@ -12,7 +12,7 @@ output:
 always_allow_html: true
 ---
 
-```{r setup, include=FALSE, message = FALSE, warning=FALSE, error=FALSE}
+```{r setup, include=FALSE, message = FALSE, warning=FALSE, error=FALSE, cache=TRUE}
 library(readxl)
 library(magrittr)
 library(janitor)
@@ -33,6 +33,8 @@ library(rmarkdown)
 library(dataMaid)
 library(animation)
 library(sf)
+library(tmap)
+library(basemaps)
 library(htmltools)
 library(gtsummary)
 library(data.table)
@@ -45,35 +47,35 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r}
-polygon = read_sf("~/git_repos/forest-sliver-check/data/LWS_LUCC_Reference_Region_2009_2015_2018.shp")
-multipolygon = st_cast(polygon, "MULTIPOLYGON")
-```
-
-## Task
+## Directive
 
 ***Prototype Tool for Checking Minimum Size of Forest Polygons in Submitted Baseline & Project Area Shapefiles***
 
 ```{r}
-multipolygon$area = st_area(multipolygon)
-slivers = multipolygon %>%
-  dplyr::filter(as.numeric(area) < 5000)
-
-ggplot(slivers) +
-  geom_sf(aes(color = 'red')) + 
-  theme_bw() +
-  theme(
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    legend.position = "none"
-  )
+tmap_mode("view")
+tmap_options(check.and.fix = T)
+polygon = read_sf("~/git_repos/forest-sliver-check/data/LULC_RR_2009_Dissolved.shp")
+multipolygon = st_cast(polygon, "MULTIPOLYGON")
+  tm_shape(st_geometry(multipolygon)) + 
+  tm_borders(col = "red") + 
+  tm_grid() +
+    tm_basemap('Esri.WorldImagery') + 
+    tm_layout(main.title = "Fig 1: Polygonized LULC Raster Submitted by Client", 
+            title.size = 1.5, main.title.position = "center")
 ```
 
-```{r}
+```{r, eval=FALSE}
+multipolygon$area = st_area(multipolygon)
+slivers = multipolygon %>%
+  dplyr::filter(as.numeric(area) < 50000)
+multipolygon$area
+```
+
+```{r, eval=FALSE}
 st_write(slivers, "slivers.shp")
 ```
 
-```{r}
+```{r, eval=FALSE}
 tmap_mode("view")
 tm_shape(st_geometry(slivers)) + tm_polygons()
 ```
